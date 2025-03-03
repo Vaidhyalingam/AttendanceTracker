@@ -1,0 +1,58 @@
+# Ignore Visual Studio and Rider settings
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore build and bin/obj directories
+bin/
+obj/
+out/
+dist/
+wwwroot/dist/
+wwwroot/framework/
+wwwroot/_framework/
+wwwroot/*.gz
+wwwroot/*.br
+wwwroot/*.wasm
+
+# Ignore logs and temporary files
+*.log
+logs/
+*.tmp
+*.cache
+*.pid
+
+# Ignore .NET artifacts
+*.db
+*.db-shm
+*.db-wal
+*.pdb
+*.publish/
+*.deps.json
+*.lock.json
+*.runtimeconfig.json
+
+# Ignore secrets and environment files
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.local
+
+# Ignore compiled TypeScript and JavaScript files
+node_modules/
+*.tsbuildinfo
+yarn.lock
+package-lock.json
+
+# Ignore GitHub Pages artifacts
+gh-pages/
+publish/
+*.Publish.xml
+
+# Ignore macOS system files
+.DS_Store
+._*

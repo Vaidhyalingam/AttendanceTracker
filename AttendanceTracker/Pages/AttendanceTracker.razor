@@ -1,0 +1,68 @@
+@page "/"
+@using global::AttendanceTracker.Services
+@inject AttendanceService AttendanceService
+
+<h3>Office Attendance Tracker</h3>
+
+<p>Current Attendance: @AttendanceCount days</p>
+<progress value="@Progress" max="100"></progress>
+<p>@Progress% completed</p>
+
+<button @onclick="MarkAttendance" disabled="@IsAttendanceCompleted">Mark Attendance</button>
+
+<table class="attendance-table">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Day</th>
+        <th>Week</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var record in AttendanceRecords)
+    {
+        <tr>
+            <td>@record.ToString("dd-MMM-yyyy")</td>
+            <td>@record.DayOfWeek</td>
+            <td>@GetWeekNumber(record)</td>
+            <td>✔</td> <!-- Tick symbol -->
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    private int AttendanceCount;
+    private double Progress;
+    private List<DateTime> AttendanceRecords = new();
+    private bool IsAttendanceCompleted => AttendanceService.IsCompleted();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AttendanceService.LoadAttendanceAsync();
+        AttendanceRecords = AttendanceService.GetAttendanceRecords();
+        UpdateProgress();
+    }
+
+    private async Task MarkAttendance()
+    {
+        await AttendanceService.MarkAttendanceAsync();
+        await AttendanceService.LoadAttendanceAsync();
+        AttendanceRecords = AttendanceService.GetAttendanceRecords();
+        UpdateProgress();
+    }
+
+    private int GetWeekNumber(DateTime date)
+    {
+        int dayOfMonth = date.Day;
+        return ((dayOfMonth - 1) / 7) + 1;
+    }
+
+    private void UpdateProgress()
+    {
+        AttendanceCount = AttendanceService.GetAttendanceCount();
+        Progress = AttendanceService.GetProgress();
+        StateHasChanged();
+    }
+}
